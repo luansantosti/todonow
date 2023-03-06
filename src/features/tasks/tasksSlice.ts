@@ -12,6 +12,10 @@ interface AddTask extends Action {
   payload: TaskPayload
 }
 
+interface CompleteTask extends Action {
+  payload: Pick<TaskPayload, 'id'>
+}
+
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState: tasks,
@@ -22,11 +26,26 @@ const tasksSlice = createSlice({
         completed: false
       })
     },
-    updateTask(state, action) {
+    completeTask(state, action: CompleteTask) {
+      const index = state.findIndex(task => task.id === action.payload.id)
+      
+      if (index === -1) {
+        return state
+      }
 
+      const itemToUpdate = state[index];
+
+      return [
+        ...state.slice(0, index),
+        {
+          ...itemToUpdate,
+          completed: true,
+        },
+        ...state.slice(index + 1),
+      ];
     }
   }
 })
 
-export const { addTask } = tasksSlice.actions
+export const { addTask, completeTask } = tasksSlice.actions
 export default tasksSlice.reducer

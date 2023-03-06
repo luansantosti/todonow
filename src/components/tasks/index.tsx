@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import { addTask } from '../../features/tasks/tasksSlice';
+import { addTask, completeTask } from '../../features/tasks/tasksSlice';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useAppSelector } from '../../hooks/useAppSelector';
 
@@ -19,10 +19,15 @@ const Tasks = () => {
     setTask('')
   }
 
+  const handleCompleteTask = (id: string) => {
+    dispatch(completeTask({ id }))
+  }
+
   return (
     <>
       {tasks.map(task => (
-        <div>
+        <div key={task.id}>
+          <button onClick={() => handleCompleteTask(task.id)}>{task.completed ? 'Done' : 'To do'}</button>
           {task.label}
         </div>
       ))}
