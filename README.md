@@ -1,2 +1,2 @@
 # todonow
-A simple todo-list app built in react.js/redux
+A simple todo-list app built in vite #reduxtoolkit
