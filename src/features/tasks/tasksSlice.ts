@@ -1,11 +1,13 @@
-import { createSlice, Action } from '@reduxjs/toolkit'
+import { createSlice, Action, createSelector } from '@reduxjs/toolkit'
 
+import { RootState } from '../../store'
 import { tasks } from '../../data'
+import { selectSelectedCategory } from '../categories/categoriesSlice';
 
 interface TaskPayload {
   id: string;
   label: string;
-  categoryId: number;
+  categoryId: string;
 }
 
 interface AddTask extends Action {
@@ -46,6 +48,13 @@ const tasksSlice = createSlice({
     }
   }
 })
+
+const selectTasks = (state: RootState) => state.tasks
+
+export const selectFilteredTasks = createSelector(
+  [selectTasks, selectSelectedCategory], 
+  (tasks, selectedCategory) => tasks.filter(task => task.categoryId === selectedCategory.id)
+)
 
 export const { addTask, completeTask } = tasksSlice.actions
 export default tasksSlice.reducer
